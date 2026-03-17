@@ -655,14 +655,49 @@
         </div>
 
         <ul>
-          <li>회귀분석의 <span class="hl">이중 강건성(doubly robust)</span>: $E[T|X]$ 또는 $E[Y_t|X]$ 중 하나만 정확해도 올바른 추정 가능.</li>
+          <li>회귀분석의 <span class="hl">이중 강건성(doubly robust)</span>: 두 가지 모델 중 하나만 정확해도 올바른 추정 가능. &rarr; 다음 슬라이드에서 자세히!</li>
         </ul>
       </div>
       <div class="footer">4장 유용한 선형회귀 &middot; 24</div>
       <div class="nav-hint"><span class="nav-btn" data-dir="prev">&larr;</span><span class="nav-btn" data-dir="next">&rarr;</span></div>
     </section>
 
-    <!-- ====== Slide 24: 실제 사례 ====== -->
+    <!-- ====== Slide 24: 이중 강건성 상세 설명 ====== -->
+    <section class="slide" data-index="24">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.4</span>이중 강건성 (Doubly Robust)</div>
+      <div class="body">
+        <ul>
+          <li>인과 효과를 정확히 계산하려면 다음 <span class="hl">두 가지 모델</span> 중 하나는 완벽하게 알아야 합니다:</li>
+        </ul>
+
+        <div style="display:flex;gap:14px;margin:12px 0;">
+          <div style="flex:1;background:rgba(107,179,255,0.1);border:1px solid rgba(107,179,255,0.3);border-radius:10px;padding:12px 14px;">
+            <p style="font-weight:700;color:#6bb3ff;margin-bottom:6px;">처치 모델 $E[T|X]$</p>
+            <p style="font-size:14px;color:#ccc;line-height:1.6;">어떤 특성($X$)을 가진 사람이 처치($T$)를 받을 <span class="hl">확률</span>이 얼마인지 알아내는 모델.<br><span style="color:#999;">(= 성향 점수, propensity score)</span></p>
+          </div>
+          <div style="flex:1;background:rgba(76,175,80,0.1);border:1px solid rgba(76,175,80,0.3);border-radius:10px;padding:12px 14px;">
+            <p style="font-weight:700;color:#4caf50;margin-bottom:6px;">결과 모델 $E[Y_t|X]$</p>
+            <p style="font-size:14px;color:#ccc;line-height:1.6;">어떤 특성($X$)을 가진 사람에게 처치($T$)를 했을 때, <span class="hl">결과($Y$)</span>가 어떻게 나올지 예측하는 모델.<br><span style="color:#999;">(= 회귀 분석 모델)</span></p>
+          </div>
+        </div>
+
+        <p style="font-weight:700;margin:14px 0 8px;color:#ffe66b;">"하나만 정확해도 된다"의 의미</p>
+        <ul>
+          <li><span style="color:#6bb3ff;font-weight:700;">처치 모델이 틀려도</span>: 결과 모델($E[Y_t|X]$)이 정확하다면 올바른 인과효과 추정 가능.</li>
+          <li><span style="color:#4caf50;font-weight:700;">결과 모델이 틀려도</span>: 처치 모델($E[T|X]$)이 정확하다면 여전히 올바른 추정 가능.</li>
+          <li>즉, 두 모델 중 <span class="hl">하나만이라도 현실을 잘 반영</span>하고 있다면, 인과 효과를 편향 없이 계산할 수 있다.</li>
+        </ul>
+
+        <div style="background:rgba(255,230,107,0.08);border:1px solid rgba(255,230,107,0.2);border-radius:8px;padding:10px 14px;margin-top:10px;font-size:14px;color:#ccc;line-height:1.7;">
+          <b style="color:#ffe66b;">왜 "이중" 강건인가?</b> 모델 두 개(처치/결과)를 동시에 사용하고, 어느 한쪽이 부정확하더라도 나머지가 보정해주므로 결과가 <b>두 겹으로 보호</b>됩니다. 실제 데이터에서는 두 모델 모두 완벽하기 어려우므로, 이 성질은 매우 실용적입니다.
+        </div>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 25</div>
+      <div class="nav-hint"><span class="nav-btn" data-dir="prev">&larr;</span><span class="nav-btn" data-dir="next">&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 25: 실제 사례 ====== -->
     <section class="slide" data-index="24">
       <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
       <div class="section-title">실제 사례: 공립학교 vs. 사립학교</div>
@@ -693,12 +728,12 @@
           <line x1="182" y1="100" x2="260" y2="100" stroke="#ccc" stroke-width="1" marker-end="url(#ah3)"/>
         </svg>
       </div>
-      <div class="footer">4장 유용한 선형회귀 &middot; 25</div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 26</div>
       <div class="nav-hint"><span class="nav-btn" data-dir="prev">&larr;</span><span class="nav-btn" data-dir="next">&rarr;</span></div>
     </section>
 
-    <!-- ====== Slide 25: 4.5 양수성과 외삽 ====== -->
-    <section class="slide" data-index="25">
+    <!-- ====== Slide 26: 4.5 양수성과 외삽 ====== -->
+    <section class="slide" data-index="26">
       <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
       <div class="section-title"><span class="num">4.5</span>양수성과 외삽</div>
       <div class="body">
@@ -710,7 +745,7 @@
           <li>요약: 양수성 가정이 충족되지 않으면 회귀분석은 외삽을 통해 해당 영역을 대체하게 되며, 이에 따른 위험을 감수해야 한다.</li>
         </ul>
       </div>
-      <div class="footer">4장 유용한 선형회귀 &middot; 26</div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 27</div>
       <div class="nav-hint"><span class="nav-btn" data-dir="prev">&larr;</span><span class="nav-btn" data-dir="next">&rarr;</span></div>
     </section>
 
