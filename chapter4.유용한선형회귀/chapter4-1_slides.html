@@ -4,261 +4,916 @@
   <meta charset="UTF-8" />
   <title>CHAPTER 4 - 유용한 선형회귀 (슬라이드)</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", system-ui, sans-serif;
-      background: #111;
-      color: #fff;
-      overflow: hidden;
+      background: #111; color: #fff; overflow: hidden;
     }
-
     .deck {
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 100vw; height: 100vh;
+      display: flex; align-items: center; justify-content: center;
     }
-
     .slide {
-      width: 90vw;
-      height: 80vh;
-      background: radial-gradient(circle at top left, #2a2a2a, #000);
-      border-radius: 18px;
-      padding: 48px 64px;
+      width: 92vw; max-width: 1100px; height: 82vh;
+      background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%);
+      border-radius: 18px; padding: 44px 56px;
       box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-      display: none;
-      position: relative;
+      display: none; position: relative; overflow-y: auto;
     }
-
     .slide.active {
-      display: block;
-      animation: fadeIn 0.25s ease-out;
+      display: flex; flex-direction: column;
+      animation: fadeIn 0.22s ease-out;
     }
-
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-
-    /* 공통 요소 */
     .chapter-label {
-      font-size: 13px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #a0a0a0;
-      display: flex;
-      align-items: center;
-      margin-bottom: 32px;
+      font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #888; display: flex; align-items: center; margin-bottom: 18px; flex-shrink: 0;
     }
     .chapter-label::before {
-      content: "";
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      border: 2px solid #a0a0a0;
-      margin-right: 10px;
+      content: ""; display: inline-block; width: 14px; height: 14px;
+      border-radius: 50%; border: 2px solid #888; margin-right: 10px;
     }
-    .chapter-label span.number {
-      font-weight: 700;
-      font-size: 18px;
-      margin-left: 8px;
+    .chapter-label .number { font-weight: 700; font-size: 17px; margin-left: 8px; }
+    .title-main { font-size: 38px; font-weight: 800; margin-bottom: 14px; letter-spacing: 0.03em; flex-shrink: 0; }
+    .subtitle { font-size: 17px; color: #bbb; margin-bottom: 20px; flex-shrink: 0; }
+    .section-title { font-size: 24px; font-weight: 700; margin-bottom: 14px; flex-shrink: 0; }
+    .section-title .num { color: #ffe66b; margin-right: 8px; }
+    .body { font-size: 17px; line-height: 1.85; color: #e8e8e8; flex: 1; overflow-y: auto; }
+    .body ul { padding-left: 22px; }
+    .body li { margin-bottom: 8px; }
+    .hl { background: rgba(255,230,107,0.18); padding: 0 4px; border-radius: 3px; }
+    .formula {
+      background: rgba(255,255,255,0.06); border-left: 3px solid #ffe66b;
+      padding: 12px 18px; margin: 14px 0; border-radius: 6px;
+      font-family: "Times New Roman", serif; font-size: 17px; color: #f0e6c0;
+      line-height: 1.7;
     }
-
-    .title-main {
-      font-size: 42px;
-      font-weight: 800;
-      margin-bottom: 18px;
-      letter-spacing: 0.04em;
-    }
-
-    .subtitle {
-      font-size: 18px;
-      color: #c0c0c0;
-      margin-bottom: 32px;
-    }
-
-    .body {
-      font-size: 18px;
-      line-height: 1.8;
-      color: #f0f0f0;
-    }
-
-    .highlight {
-      background: #ffe66b33;
-      padding: 0 4px;
-      border-radius: 3px;
-    }
-
-    .en {
-      font-size: 0.8em;
-      color: #b0b0b0;
-      font-style: italic;
-      margin-left: 4px;
-    }
-
-    .section-title {
-      font-size: 26px;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-
-    .section-title span.number {
-      color: #ffe66b;
-      margin-right: 8px;
-    }
-
     .note {
-      margin-top: 24px;
-      font-size: 15px;
-      color: #b8b8b8;
+      margin-top: 14px; font-size: 14px; color: #aaa; flex-shrink: 0;
     }
-
+    .en { font-size: 0.82em; color: #999; font-style: italic; margin-left: 3px; }
     .footer {
-      position: absolute;
-      bottom: 24px;
-      right: 32px;
-      font-size: 13px;
-      color: #888;
+      position: absolute; bottom: 20px; right: 36px;
+      font-size: 12px; color: #666;
     }
-
     .nav-hint {
-      position: absolute;
-      bottom: 24px;
-      left: 32px;
-      font-size: 13px;
-      color: #777;
+      position: absolute; bottom: 20px; left: 36px;
+      font-size: 12px; color: #555;
     }
-
     .nav-hint span {
-      background: #ffffff15;
-      border-radius: 4px;
-      padding: 4px 8px;
-      margin-right: 6px;
-      border: 1px solid #ffffff22;
+      background: rgba(255,255,255,0.08); border-radius: 4px;
+      padding: 3px 7px; margin-right: 4px; border: 1px solid rgba(255,255,255,0.12);
     }
+    .slide-counter {
+      position: fixed; top: 16px; right: 24px;
+      font-size: 13px; color: #555; z-index: 10;
+    }
+    .quiz-badge {
+      display: inline-block; background: #ffe66b; color: #111;
+      padding: 3px 12px; border-radius: 999px; font-size: 13px;
+      font-weight: 700; margin-bottom: 10px;
+    }
+    .answer-badge {
+      display: inline-block; background: #4caf50; color: #fff;
+      padding: 3px 12px; border-radius: 999px; font-size: 13px;
+      font-weight: 700; margin-bottom: 10px;
+    }
+    .slide::-webkit-scrollbar { width: 4px; }
+    .slide::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
   </style>
 </head>
 <body>
+  <div class="slide-counter" id="counter"></div>
   <div class="deck">
-    <!-- 슬라이드 1: 챕터 타이틀 -->
+
+    <!-- ====== Slide 0: 타이틀 ====== -->
     <section class="slide active" data-index="0">
-      <div class="chapter-label">
-        <span>CHAPTER</span>
-        <span class="number">4</span>
-      </div>
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
       <div class="title-main">유용한 선형회귀</div>
-      <div class="subtitle">중요한 편향 제거 기법과 OLS, 직교화</div>
-
-      <p class="body">
-        이 장에서는
-        <span class="highlight">선형회귀</span><span class="en">linear regression</span>,
-        <span class="highlight">최소제곱법</span><span class="en">ordinary least squares, OLS</span>,
-        그리고 <span class="highlight">직교화</span><span class="en">orthogonalization</span>를 다룹니다.
-      </p>
-
-      <p class="note">
-        목표: 회귀분석을 단순 예측 도구가 아니라,
-        <span class="highlight">교란을 통제하고 인과효과를 파악하기 위한 도구</span>로 이해하는 것.
-      </p>
-
-      <div class="footer">4장 유용한 선형회귀 · 1</div>
-      <div class="nav-hint">
-        <span>←</span> <span>→</span> 방향키로 이동
+      <div class="subtitle">편향 제거 기법: 선형회귀, OLS, 직교화</div>
+      <div class="body">
+        <ul>
+          <li><span class="hl">선형회귀</span><span class="en">linear regression</span>를 인과추론 관점에서 다시 바라봅니다.</li>
+          <li><span class="hl">최소제곱법(OLS)</span>과 <span class="hl">직교화</span><span class="en">orthogonalization</span>를 활용한 편향 제거 기법을 배웁니다.</li>
+          <li>교란 요인을 보정하여 처치와 결과 사이의 인과 관계를 추정하는 방법을 익힙니다.</li>
+          <li>머신러닝과 결합할 때 유용한 <span class="hl">처치 직접효과</span> 개념을 소개합니다.</li>
+        </ul>
       </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 1</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span> 방향키로 이동</div>
     </section>
 
-    <!-- 슬라이드 2: 왜 선형회귀인가 -->
+    <!-- ====== Slide 1: 4.1 선형회귀의 필요성 ====== -->
     <section class="slide" data-index="1">
-      <div class="chapter-label">
-        <span>CHAPTER</span>
-        <span class="number">4</span>
-      </div>
-
-      <div class="section-title">
-        <span class="number">4.1</span>선형회귀의 필요성
-      </div>
-
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.1</span>선형회귀의 필요성</div>
       <div class="body">
-        회귀분석은 데이터 과학을 처음 접하는 사람들이 가장 먼저 배우는 모델 중 하나이며,
-        비교적 단순한 방법으로 여겨집니다. 하지만 실제로는
-        <span class="highlight">선형회귀를 제대로 이해하지 못한 채 사용하는 경우</span>가 많습니다.
-        <br /><br />
-        100년이 넘는 역사를 가진 고전적인 모형이지만,
-        인과추론에서 여전히 매력적이고 강력하며,
-        때로는 매우 위험한 도구이기도 합니다.
+        <ul>
+          <li>회귀분석은 100년이 넘는 역사를 가진 고전 모형이지만, 인과추론에서 여전히 <span class="hl">매력적이고 강력하며, 때로는 위험한</span> 도구입니다.</li>
+          <li>패널데이터 방법(DID), 이원고정효과(TWFE), 머신러닝 방법(이중/편향 제거) 등 응용 방법론의 <span class="hl">핵심 구성 요소</span>이기도 합니다.</li>
+          <li>이 장에서는 회귀분석을 단순 예측이 아니라, <span class="hl">교란을 통제하고 인과효과를 파악하기 위한 도구</span>로 다시 바라봅니다.</li>
+        </ul>
       </div>
-
-      <p class="note">
-        ▶ 왜 이렇게 오래되었는데도 여전히 널리 쓰일까?<br />
-        ▶ 어떤 상황에서 인과효과 추정에 도움이 되고, 언제 우리를 속일까?
-      </p>
-
-      <div class="footer">4장 유용한 선형회귀 · 2</div>
-      <div class="nav-hint">
-        <span>←</span> <span>→</span> 방향키로 이동
-      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 2</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
     </section>
 
-    <!-- 슬라이드 3: 이 장에서 다룰 질문 -->
+    <!-- ====== Slide 2: 4.1.1 모델이 필요한 이유 ====== -->
     <section class="slide" data-index="2">
-      <div class="chapter-label">
-        <span>CHAPTER</span>
-        <span class="number">4</span>
-      </div>
-
-      <div class="section-title">이 장에서 던질 핵심 질문들</div>
-
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.1.1</span>모델이 필요한 이유</div>
       <div class="body">
-        • 회귀계수는 언제 <span class="highlight">인과효과</span>로 해석할 수 있을까?<br />
-        • 교란 변수를 회귀식에 넣으면 어떤 의미에서
-        <span class="highlight">편향이 제거</span>되는가?<br />
-        • <span class="highlight">직접효과(direct effect)</span>와
-        <span class="highlight">간접효과(indirect effect)</span>는
-        회귀식 안에서 어떻게 나타나는가?<br />
-        • 머신러닝 모형과 결합했을 때, 선형회귀 아이디어는 어떤 식으로 확장될까?
+        <ul>
+          <li>은행 예시: 신용카드 한도(처치)가 채무불이행률(결과)에 미치는 영향을 추정하고 싶다.</li>
+          <li>실제 데이터에서는 신용 한도와 채무불이행률 사이에 <span class="hl">음의 상관관계</span>가 나타남.</li>
+          <li>이유: 은행이 위험이 낮은 고객에게 더 높은 한도를 설정하는 <span class="hl">처치 배정 메커니즘</span> 때문.</li>
+          <li>이것은 <span class="hl">교란편향(confounding bias)</span>의 전형적 사례입니다.</li>
+        </ul>
+        <div class="note">DAG: 위험도 &rarr; X(신용 한도) &rarr; 채무불이행률, 위험도 &rarr; 채무불이행률 (뒷문 경로)</div>
       </div>
-
-      <p class="note">
-        이 질문들을 염두에 두고, 선형회귀를 인과추론 도구로 다시 바라보는 것이
-        이 장의 목표입니다.
-      </p>
-
-      <div class="footer">4장 유용한 선형회귀 · 3</div>
-      <div class="nav-hint">
-        <span>←</span> <span>→</span> 방향키로 이동
-      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 3</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
     </section>
+
+    <!-- ====== Slide 3: 차원의 저주와 선형회귀 ====== -->
+    <section class="slide" data-index="3">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title">차원의 저주와 선형회귀의 해결</div>
+      <div class="body">
+        <ul>
+          <li>소득이나 신용점수 같은 <span class="hl">대리변수(proxy)</span>로 고유 위험을 추정할 수 있다.</li>
+          <li>조건부 독립성 가정 (Y₀, Y₁) &perp; T | X 이 만족되면 인과효과 식별 가능.</li>
+        </ul>
+        <div class="formula">ATE = E_x { E[Y | T=1, X=x] &minus; E[Y | T=0, X=x] }</div>
+        <ul>
+          <li>하지만 공변량 X가 많으면 각 셀의 표본이 부족해지는 <span class="hl">차원의 저주</span><span class="en">curse of dimensionality</span> 문제 발생.</li>
+          <li>선형회귀는 이를 해결하는 <span class="hl">차원 축소 알고리즘</span>으로 볼 수 있다.</li>
+        </ul>
+        <div class="note">인과추론 용어 &harr; 머신러닝: 특성=공변량, 가중치=매개변수, 목표=결과</div>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 4</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 4: 4.1.2 A/B 테스트와 회귀분석 ====== -->
+    <section class="slide" data-index="4">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.1.2</span>A/B 테스트와 회귀분석</div>
+      <div class="body">
+        <ul>
+          <li>스트리밍 회사에서 새로운 추천 시스템의 효과를 A/B 테스트로 검증하는 상황.</li>
+          <li>표본에서 1/3은 새 추천(challenger), 나머지는 기존 추천(benchmark)을 사용.</li>
+          <li>한 달 후 하루 평균 시청 시간(watch_time) 비교.</li>
+          <li>무작위 배정이므로 <span class="hl">단순한 평균 비교만으로도 ATE</span>를 알 수 있다.</li>
+          <li>그런데 A/B 테스트 결과를 <span class="hl">회귀분석으로 해석</span>하면, 추정 + 신뢰구간 + p값을 한꺼번에 얻을 수 있다!</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 5</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 5: 회귀로 ATE 추정 ====== -->
+    <section class="slide" data-index="5">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title">회귀분석으로 ATE 추정하기</div>
+      <div class="body">
+        <div class="formula">WatchTime_i = &beta;&#x2080; + &beta;&#x2081; &middot; challenger_i + e_i</div>
+        <ul>
+          <li>challenger = 1이면 새로운 추천 시스템, 0이면 기존 시스템.</li>
+          <li><span class="hl">&beta;&#x2080; (절편)</span> = 기존 추천 시스템 사용자의 평균 시청 시간 (약 2.04시간).</li>
+          <li><span class="hl">&beta;&#x2081;</span> = 새로운 버전의 효과(ATE) 추정값 (약 0.14시간, 통계적으로 유의하지 않음).</li>
+          <li>범주형 변수는 <code>C(...)</code>로 묶어주면 R 스타일 수식으로 표현 가능.</li>
+        </ul>
+        <div class="note">Python: smf.ols('watch_time ~ C(recommender)', data=data).fit()</div>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 6</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 6: 회귀 = 평균 비교 ====== -->
+    <section class="slide" data-index="6">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title">회귀분석 = 그룹 평균 비교</div>
+      <div class="body">
+        <ul>
+          <li>groupby("recommender")["watch_time"].mean() 결과:<br>
+            &nbsp;&nbsp;benchmark: 2.049, challenger: 2.192</li>
+          <li>절편 &beta;&#x2080; = 대조군(benchmark) 평균 = 2.049</li>
+          <li>&beta;&#x2081; = 두 그룹 평균 차이 = 2.192 &minus; 2.049 = <span class="hl">0.143</span></li>
+          <li>즉, 단순 이진 처치에서 <span class="hl">회귀분석은 그룹 평균을 비교하는 것과 수학적으로 동일</span>합니다.</li>
+          <li>그렇다면 왜 회귀를 쓸까? &rarr; 신뢰구간, p값, 그리고 <span class="hl">교란 변수 보정</span>까지 한 번에 가능하니까요.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 7</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 7: 4.1.3 회귀분석을 통한 보정 ====== -->
+    <section class="slide" data-index="7">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.1.3</span>회귀분석을 통한 보정</div>
+      <div class="body">
+        <ul>
+          <li>이제 처치가 연속형인 상황: <span class="hl">신용 한도(credit_limit)</span>가 채무불이행(default)에 미치는 영향.</li>
+          <li>연속형 처치에서는 ATE를 <span class="hl">도함수</span>로 표현할 수 있다:</li>
+        </ul>
+        <div class="formula">ATE = &part;/&part;t &middot; E[y | t]</div>
+        <ul>
+          <li>처치가 1단위 증가했을 때 결과가 얼마나 변하는지에 대한 기댓값.</li>
+          <li>이를 추정하는 가장 간단한 방법이 바로 <span class="hl">회귀분석</span>입니다.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 8</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 8: 교란 편향 시각화 ====== -->
+    <section class="slide" data-index="8">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title">교란 편향: 음의 상관관계의 함정</div>
+      <div class="body">
+        <div class="formula">Default_i = &beta;&#x2080; + &beta;&#x2081; &middot; line_i + e_i</div>
+        <ul>
+          <li>credit_limit만으로 회귀하면 &beta;&#x2081; &asymp; &minus;2.4e&minus;05 (음수!).</li>
+          <li>즉, 신용 한도가 높을수록 채무불이행률이 <span class="hl">낮아지는</span> 것처럼 보인다.</li>
+          <li>시각화: 산점도에서 신용 한도(x축)와 채무불이행률(y축) 사이에 우하향 회귀선.</li>
+          <li>이유: 은행이 위험이 적은 고객에게 높은 한도를 부여 &rarr; <span class="hl">교란편향</span>.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 9</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 9: 교란 보정 ====== -->
+    <section class="slide" data-index="9">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title">교란 요인을 OLS에 추가하여 보정하기</div>
+      <div class="body">
+        <div class="formula">Default_i = &beta;&#x2080; + &beta;&#x2081; &middot; line_i + &theta;X_i + e_i</div>
+        <ul>
+          <li>교란 요인(신용점수, 임금 등)을 모델에 <span class="hl">직접 추가</span>하면 편향을 보정할 수 있다.</li>
+          <li>&theta;는 교란 요인과 관련된 매개변수 벡터. 이 값의 인과관계 해석에는 관심 없다.</li>
+          <li>이러한 매개변수를 <span class="hl">장애모수(nuisance parameter)</span>라고 부른다.</li>
+          <li>&beta;&#x2081;의 의미: <span class="hl">"다른 모든 변수가 고정된 상태에서"</span> 신용 한도를 조금 늘렸을 때 채무불이행률의 변화.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 10</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 10: 교란 보정 결과 + FWL 소개 ====== -->
+    <section class="slide" data-index="10">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title">교란 보정 결과와 FWL 정리 소개</div>
+      <div class="body">
+        <ul>
+          <li>wage, credit_score1, credit_score2를 추가하자 credit_limit의 계수가 <span class="hl">양수(3.06e-06)</span>로 전환!</li>
+          <li>교란 요인을 통제하니 마침내 <span class="hl">신용 한도 &uarr; &rarr; 채무불이행률 &uarr;</span> 이라는 직관에 맞는 결과.</li>
+          <li>즉, 처치와 결과 사이의 관계를 추정하는 동안 <span class="hl">교란 요인을 고정</span>한다는 것을 알 수 있다.</li>
+        </ul>
+        <div class="formula" style="border-left-color:#4caf50;">
+          <b>프리슈&ndash;워&ndash;로벨(FWL) 정리</b><br>
+          편향을 흡수하여 제거하는 고급 기법. <span class="hl">편향 제거 단계와 영향 추정 단계를 분리</span>할 수 있어서,
+          전처리 단계에서 사용할 수 있기 때문에 매우 유용합니다.
+        </div>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 11</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 11: 4.2 회귀분석 이론 ====== -->
+    <section class="slide" data-index="11">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.2</span>회귀분석 이론 &mdash; OLS</div>
+      <div class="body">
+        <ul>
+          <li>선형회귀분석은 <span class="hl">평균제곱오차(MSE)를 최소화</span>하는 매개변수 &beta;*를 찾는다.</li>
+        </ul>
+        <div class="formula">
+          &beta;* = argmin<sub>&beta;</sub> E[ (Y_i &minus; X_i &beta;)&sup2; ]
+        </div>
+        <ul>
+          <li>이를 미분하고 0으로 두면 <span class="hl">정규방정식</span>의 해를 얻는다:</li>
+        </ul>
+        <div class="formula">
+          &beta;* = E[X'X]<sup>&minus;1</sup> E[X'Y]<br>
+          &beta;&#x0302; = (X'X)<sup>&minus;1</sup> X'Y &nbsp;&nbsp;(표본 버전)
+        </div>
+        <ul>
+          <li>X'X는 공분산/분산 역할, X'Y는 분자 역할 &rarr; 공분산을 분산으로 나누는 구조.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 12</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 12: 4.2.1 단순선형회귀 ====== -->
+    <section class="slide" data-index="12">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.2.1</span>단순선형회귀</div>
+      <div class="body">
+        <ul>
+          <li>단일 설명변수 T만 있을 때, 매개변수는 다음과 같이 단순화:</li>
+        </ul>
+        <div class="formula">
+          &tau;&#x0302; = Cov(Y, T) / Var(T) = E[(T_i &minus; T&#x0304;)(Y_i &minus; Y&#x0304;)] / E[(T_i &minus; T&#x0304;)&sup2;]
+        </div>
+        <ul>
+          <li>T가 무작위로 배정된 경우 &tau;&#x0302;는 <span class="hl">ATE</span>입니다.</li>
+          <li>회귀분석은 처치와 결과의 <span class="hl">공분산을 처치의 분산으로 나눈 값</span>.</li>
+          <li>직관: T가 1단위 변할 때 Y가 얼마나 함께 움직이는가를 정규화한 것.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 13</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 13: 4.2.2 다중선형회귀 ====== -->
+    <section class="slide" data-index="13">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.2.2</span>다중선형회귀</div>
+      <div class="body">
+        <div class="formula">y_i = &beta;&#x2080; + &tau;T_i + &beta;&#x2081;X&#x2081;i + &hellip; + &beta;&#x2096;X&#x2096;i + u_i</div>
+        <ul>
+          <li>설명변수가 두 개 이상일 때, 관심 있는 건 T와 관련된 &tau; 뿐!</li>
+          <li>&tau;&#x0302;는 다음과 같이 구할 수 있다:</li>
+        </ul>
+        <div class="formula">
+          &tau;&#x0302; = Cov(Y, T&#x0303;) / Var(T&#x0303;)<br>
+          T&#x0303; = T를 모든 공변량 X에 대해 회귀한 <b>잔차(residual)</b>
+        </div>
+        <ul>
+          <li><span class="hl">다중회귀에서 회귀계수의 의미</span>: 모델의 다른 변수들의 효과를 고려한 후 얻은 동일 설명변수의 이변량 계수.</li>
+          <li>인과추론 관점: 다른 변수를 사용해 T를 예측한 후 얻은 <span class="hl">T의 이변량 계수</span>.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 14</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 14: 4.3 FWL 정리 ====== -->
+    <section class="slide" data-index="14">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.3</span>프리슈&ndash;워&ndash;로벨 정리와 직교화</div>
+      <div class="body">
+        <ul>
+          <li><span class="hl">FWL 스타일의 직교화</span><span class="en">orthogonalization</span>는 가장 먼저 사용할 수 있는 <span class="hl">편향 제거(debiasing) 기법</span>.</li>
+          <li>비실험 데이터를 처치가 무작위 배정된 것처럼 보이게 만듦.</li>
+          <li>FWL 정리에 따르면, 다중선형회귀분석을 <span class="hl">세 단계</span>로 나눌 수 있다:</li>
+        </ul>
+        <div class="formula">
+          1. <b>편향 제거 단계</b>: T를 X에 대해 회귀 &rarr; 잔차 T&#x0303; = T &minus; T&#x0302;<br>
+          2. <b>잡음 제거 단계</b>: Y를 X에 대해 회귀 &rarr; 잔차 Y&#x0303; = Y &minus; Y&#x0302;<br>
+          3. <b>결과 모델 단계</b>: Y&#x0303;를 T&#x0303;에 대해 회귀 &rarr; 인과효과 추정
+        </div>
+        <ul>
+          <li>이 세 단계의 결과는 한 번에 다중회귀한 것과 <span class="hl">정확히 동일</span>!</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 15</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 15: 4.3.1 편향 제거 단계 ====== -->
+    <section class="slide" data-index="15">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.3.1</span>편향 제거 단계</div>
+      <div class="body">
+        <ul>
+          <li>교란 요인 X로부터 처치 T를 예측하는 회귀 모델을 적합.</li>
+          <li>예측값을 빼서 잔차를 구함:</li>
+        </ul>
+        <div class="formula">
+          line&#x0303;_i = line_i &minus; line&#x0302;_i + line&#x0304;
+        </div>
+        <ul>
+          <li>잔차 line&#x0303;는 X의 다른 변수와 <span class="hl">상관관계가 없는</span> 버전의 처치.</li>
+          <li>즉, 교란 요인의 영향이 제거된 "깨끗한" 처치 변수를 얻는다.</li>
+          <li>시각화: 편향 제거 전에는 음의 추세 &rarr; 편향 제거 후에는 <span class="hl">하향선이 사라짐</span>.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 16</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 16: 편향 제거 코드/결과 ====== -->
+    <section class="slide" data-index="16">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title">편향 제거 후 결과 확인</div>
+      <div class="body">
+        <ul>
+          <li>편향 제거된(잔차화된) 처치인 <code>credit_limit_res</code>에 default를 회귀.</li>
+          <li>결과: credit_limit_res의 계수 = <span class="hl">3.063e-06</span> (양수!), p = 0.047.</li>
+          <li>이 값은 모든 교란 요인(wage, credit_score1, credit_score2)을 포함한 <span class="hl">완전 모델의 결과와 정확히 동일</span>.</li>
+          <li>FWL 정리의 핵심: 편향 제거 단계만 거쳐도 올바른 인과효과 추정값을 얻을 수 있다!</li>
+        </ul>
+        <div class="note">단, 표준오차와 p값까지 완전히 일치시키려면 잡음 제거 단계도 필요.</div>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 17</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 17: 또 다른 회귀계수 공식 ====== -->
+    <section class="slide" data-index="17">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title">회귀계수의 또 다른 공식</div>
+      <div class="body">
+        <ul>
+          <li>단순선형회귀에서:</li>
+        </ul>
+        <div class="formula">&beta;&#x2081; = E[(T_i &minus; T&#x0304;) &middot; y_i] / E[(T_i &minus; T&#x0304;)&sup2;]</div>
+        <ul>
+          <li>다중선형회귀에서는:</li>
+        </ul>
+        <div class="formula">&beta;&#x2081; = E[(T_i &minus; E[T|X]) &middot; y_i] / E[Var(T|X)]</div>
+        <ul>
+          <li>편향 제거만 적용해도 모든 교란 요인을 포함한 완전 모델과 동일한 <span class="hl">편향되지 않은 추정값</span>을 얻는다.</li>
+          <li>시각화: 편향 제거된 신용 한도(x축) vs 채무불이행률(y축) &rarr; 더 이상 하향선이 없음!</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 18</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 18: 잡음 제거 + 표준오차 ====== -->
+    <section class="slide" data-index="18">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.3.2</span>잡음 제거 단계 &amp; <span class="num">4.3.3</span>표준오차</div>
+      <div class="body">
+        <ul>
+          <li><b>잡음 제거</b>: 결과 Y를 처치가 아닌 공변량 X에 대해 회귀하여 잔차를 얻는다.</li>
+        </ul>
+        <div class="formula">default&#x0303;_i = default_i &minus; default&#x0302;_i + default&#x0304;</div>
+        <ul>
+          <li>잡음 제거는 처치효과 추정값을 바꾸지 않지만, <span class="hl">분산을 줄여</span> 표준오차를 낮춘다.</li>
+          <li>X가 Y의 분산을 많이 설명할수록 잡음 제거 효과가 크다.</li>
+        </ul>
+        <div class="formula">
+          <b>표준오차 공식:</b><br>
+          SE(&beta;&#x0302;) = &sigma;(e&#x0302;) / [ &sigma;(T&#x0303;) &middot; &radic;(n &minus; DF) ]<br><br>
+          e&#x0302; = 회귀 모델의 잔차, n&minus;DF = 자유도(매개변수 개수 차감)
+        </div>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 19</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 19: 잡음 제거의 핵심 ====== -->
+    <section class="slide" data-index="19">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title">잡음 제거의 핵심과 실험 설계</div>
+      <div class="body">
+        <ul>
+          <li>결과를 잘 예측할수록 잔차가 작아지고 &rarr; 추정값의 <span class="hl">분산이 낮아진다</span>.</li>
+          <li>처치가 결과를 많이 설명하면 매개변수 추정값의 표준오차도 작아진다.</li>
+          <li>SE는 (잔차화된) 처치의 분산에 <span class="hl">반비례</span>. 처치 변동이 클수록 측정이 쉬워짐.</li>
+        </ul>
+        <div class="formula">
+          <b>연속형 처치 실험의 표준오차 근사:</b><br>
+          SE &asymp; &sigma;(y) / [ &sigma;(T) &middot; &radic;(n &minus; 2) ]
+        </div>
+        <ul>
+          <li>&sigma;(T)를 키우면 SE가 줄어든다 &rarr; 실험 설계 시 처치의 분포를 신중히 선택해야.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 20</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 20: 4.3.4 최종 결과 모델 ====== -->
+    <section class="slide" data-index="20">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.3.4</span>최종 결과 모델</div>
+      <div class="body">
+        <ul>
+          <li>FWL의 마지막 단계: 두 잔차 Y&#x0303;와 T&#x0303;를 이용해 단순히 <span class="hl">Y&#x0303;를 T&#x0303;에 회귀</span>.</li>
+          <li>결과: credit_limit_res 계수 = 3.063e-06, SE = 1.54e-06, t = 1.987, p = 0.047.</li>
+          <li>이 값은 처음부터 모든 변수를 포함해서 회귀한 완전모델과 <span class="hl">매개변수, 표준오차, p값 모두 완전히 동일</span>!</li>
+          <li>잡음 제거 단계의 효과: 표준오차와 p값까지 일치시켜 줌.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 21</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 21: FWL 요약 시각화 ====== -->
+    <section class="slide" data-index="21">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.3.5</span>FWL 정리 요약 &mdash; 시각적 이해</div>
+      <div class="body">
+        <ul>
+          <li><b>그림 4-1: 직교화로 편향 제거하기</b></li>
+          <li>1단계: 처치 T와 결과 Y를 색(교란 요인 X)으로 표시 &rarr; 처음에는 음의 기울기.</li>
+          <li>2단계: E[T|X]를 추정하고 편향 제거 &rarr; T &minus; E[T|X].</li>
+          <li>3단계: 편향 제거된 처치를 사용하면 찾으려는 <span class="hl">양의 관계</span>가 드러남. 하지만 여전히 잡음이 많음.</li>
+        </ul>
+        <div class="note">핵심: 편향 제거 = X와의 상관관계가 없는 버전의 처치를 만드는 과정.</div>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 22</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 22: 잡음 제거 시각화 ====== -->
+    <section class="slide" data-index="22">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title">직교화로 잡음 제거하기 (그림 4-2)</div>
+      <div class="body">
+        <ul>
+          <li>E[Y|X]를 추정하고 잡음 제거: Y &minus; E[Y|X].</li>
+          <li>X가 Y의 분산을 많이 설명하면, 잡음 제거된 결과에서는 <span class="hl">분산이 크게 줄어듦</span>.</li>
+          <li>마지막으로 편향+잡음 모두 제거된 T&#x0303;와 Y&#x0303;를 그리면:</li>
+          <li>깔끔한 <span class="hl">양의 선형 관계</span>가 명확하게 드러난다.</li>
+          <li>이 마지막 회귀식은 Y를 T와 X에 동시에 회귀했을 때의 기울기와 <span class="hl">정확히 같다</span>.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 23</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 23: 4.4 결과 모델로서의 회귀분석 ====== -->
+    <section class="slide" data-index="23">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.4</span>결과 모델로서의 회귀분석</div>
+      <div class="body">
+        <ul>
+          <li>회귀분석은 처치를 직교화하는 방식뿐 아니라, <span class="hl">잠재적 결과를 대체(imputation)</span>하는 방법으로도 볼 수 있다.</li>
+          <li>대조군(T=0)에서 X에 대한 Y의 회귀분석이 E[Y₀|X]를 잘 근사한다면:</li>
+        </ul>
+        <div class="formula">
+          ATT = (1/N₁) &sum; 1(T_i=1) &middot; (Y_i &minus; &mu;&#x0302;₀(X_i))
+        </div>
+        <ul>
+          <li>두 접근법을 병행하면 ATE도 추정 가능:</li>
+        </ul>
+        <div class="formula">
+          ATE = (1/N) &sum; (&mu;&#x0302;₁(X_i) &minus; &mu;&#x0302;₀(X_i))
+        </div>
+        <ul>
+          <li>회귀분석의 <span class="hl">이중 강건성(doubly robust)</span>: E[T|X] 또는 E[Y_t|X] 중 하나만 정확해도 올바른 추정 가능.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 24</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 24: 실제 사례 ====== -->
+    <section class="slide" data-index="24">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title">실제 사례: 공립학교 vs. 사립학교</div>
+      <div class="body">
+        <ul>
+          <li>사립학교가 소득에 미치는 영향을 추정하고 싶다.</li>
+          <li>단순 회귀: income = &delta;&#x2080; + &beta;&#x2081; &middot; private + e &rarr; 양의 효과 (하지만 편향!)</li>
+          <li>SAT 점수, 부모 소득을 추가하면 효과가 <span class="hl">감소</span>.</li>
+          <li>학생의 포부(AvgSATSchool)까지 추가하자 &beta;&#x2081;이 <span class="hl">유의하지 않게</span> 됨.</li>
+          <li>교훈: 통제변수를 추가할수록 진짜 인과효과에 가까워지지만, 어떤 변수를 넣을지가 핵심.</li>
+        </ul>
+        <div class="note">DAG: 부모의 소득, SAT, 포부 등이 사립학교 선택과 소득 모두에 영향.</div>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 25</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 25: 4.5 양수성과 외삽 ====== -->
+    <section class="slide" data-index="25">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.5</span>양수성과 외삽</div>
+      <div class="body">
+        <ul>
+          <li>회귀분석은 모수적(parametric) 모델이므로 데이터 범위 밖으로 <span class="hl">외삽(extrapolation)</span>할 수 있다.</li>
+          <li>중첩(overlap)이 적은 데이터셋에서도 처치효과를 추정할 수 있지만, 이는 <span class="hl">위험</span>할 수 있다.</li>
+          <li><span class="hl">양수성 가정</span><span class="en">positivity</span>: 모든 X값에서 T를 받을 확률이 0 &lt; P(T=1|X) &lt; 1.</li>
+          <li>양수성이 충족되지 않는 영역에서는 회귀가 <span class="hl">외삽으로 대체</span>하는데, 이 결과를 신뢰하기 어렵다.</li>
+          <li>요약: 양수성 가정이 충족되지 않으면 회귀분석은 외삽을 통해 해당 영역을 대체하게 되며, 이에 따른 위험을 감수해야 한다.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 26</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== Slide 26: 4.6 비선형성 ====== -->
+    <section class="slide" data-index="26">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="section-title"><span class="num">4.6</span>선형회귀에서의 비선형성</div>
+      <div class="body">
+        <ul>
+          <li>지금까지는 처치 반응 곡선이 꽤 선형적이었다.</li>
+          <li>신용 한도가 일정 정도로 위험이 증가하는 것처럼 말이죠.</li>
+          <li>하지만 현실에서는 처치 효과가 <span class="hl">비선형</span>일 수 있다.</li>
+          <li>예: 신용 한도가 1,000에서 2,000으로 늘어날 때 vs. 7,000에서 8,000으로 늘어날 때의 효과가 다를 수 있음.</li>
+          <li>이 경우 선형 모델의 가정이 깨지며, 더 유연한 모델(다항식, 스플라인, 머신러닝 등)이 필요.</li>
+        </ul>
+        <div class="note">이 주제는 이후 챕터에서 머신러닝과 결합하여 더 깊이 다룹니다.</div>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; 27</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ================================================================ -->
+    <!--                       복습 퀴즈 섹션                              -->
+    <!-- ================================================================ -->
+
+    <!-- Q1 질문 -->
+    <section class="slide" data-index="27">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="quiz-badge">복습 퀴즈 Q1</div>
+      <div class="section-title">장애모수(nuisance parameter)란?</div>
+      <div class="body">
+        <p style="margin-bottom:16px;">다음 중 <b>장애모수</b>에 대한 설명으로 올바른 것은?</p>
+        <ul>
+          <li><b>A.</b> 모델에서 가장 중요한 인과 관계를 나타내는 매개변수</li>
+          <li><b>B.</b> 인과관계 해석에 관심은 없지만, 관심 매개변수의 편향 없는 추정을 위해 포함해야 하는 매개변수</li>
+          <li><b>C.</b> 모델에서 제거해야 하는 불필요한 노이즈 변수</li>
+          <li><b>D.</b> 처치 변수 자체를 의미하는 또 다른 이름</li>
+        </ul>
+        <div class="note">&rarr; 키를 눌러 정답을 확인하세요.</div>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q1</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- Q1 정답 -->
+    <section class="slide" data-index="28">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="answer-badge">Q1 정답</div>
+      <div class="section-title">정답: B</div>
+      <div class="body">
+        <ul>
+          <li><span class="hl">장애모수</span>는 그 자체의 인과적 의미에는 관심이 없지만, 관심 있는 처치 변수의 <span class="hl">편향 없는 추정을 위해 모델에 포함</span>해야 하는 교란 요인의 매개변수입니다.</li>
+          <li>예: Default = &beta;₀ + &beta;₁line + &theta;X + e 에서 &theta;가 장애모수.</li>
+          <li>인과추론에서 &beta;₁만 관심이지만, &theta;를 포함하지 않으면 &beta;₁에 편향이 생깁니다.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q1 정답</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- Q2 질문 -->
+    <section class="slide" data-index="29">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="quiz-badge">복습 퀴즈 Q2</div>
+      <div class="section-title">단순선형회귀 계수의 의미</div>
+      <div class="body">
+        <p style="margin-bottom:16px;">&tau;&#x0302; = Cov(Y, T) / Var(T) 에서, T가 <b>무작위로 배정</b>되었다면 이 값은 무엇을 의미하는가?</p>
+        <ul>
+          <li><b>A.</b> T와 Y 사이의 상관계수</li>
+          <li><b>B.</b> 평균 처치 효과(ATE)</li>
+          <li><b>C.</b> 처치군의 평균 결과</li>
+          <li><b>D.</b> 결과의 분산</li>
+        </ul>
+        <div class="note">&rarr; 키를 눌러 정답을 확인하세요.</div>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q2</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- Q2 정답 -->
+    <section class="slide" data-index="30">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="answer-badge">Q2 정답</div>
+      <div class="section-title">정답: B</div>
+      <div class="body">
+        <ul>
+          <li>T가 무작위로 배정되면, 공분산/분산으로 구한 회귀계수는 <span class="hl">ATE(평균 처치 효과)</span>와 동일합니다.</li>
+          <li>직관: T가 1단위 변할 때 Y가 평균적으로 얼마나 변하는가.</li>
+          <li>상관계수(A)와 혼동하기 쉽지만, 상관계수는 표준화된 값이고 회귀계수는 원래 스케일입니다.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q2 정답</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- Q3 질문 -->
+    <section class="slide" data-index="31">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="quiz-badge">복습 퀴즈 Q3</div>
+      <div class="section-title">교란편향 해석</div>
+      <div class="body">
+        <p style="margin-bottom:16px;">신용 한도(credit_limit)만으로 채무불이행(default)을 회귀하면 <b>음의 계수</b>가 나옵니다.<br>그 이유로 가장 적절한 것은?</p>
+        <ul>
+          <li><b>A.</b> 신용 한도가 높으면 실제로 채무불이행 확률이 낮아지기 때문</li>
+          <li><b>B.</b> 데이터의 표본 크기가 너무 작기 때문</li>
+          <li><b>C.</b> 은행이 위험이 낮은 고객에게 높은 한도를 부여하는 처치 배정 메커니즘(교란) 때문</li>
+          <li><b>D.</b> 선형 모델이 비선형 관계를 잡지 못하기 때문</li>
+        </ul>
+        <div class="note">&rarr; 키를 눌러 정답을 확인하세요.</div>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q3</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- Q3 정답 -->
+    <section class="slide" data-index="32">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="answer-badge">Q3 정답</div>
+      <div class="section-title">정답: C</div>
+      <div class="body">
+        <ul>
+          <li>은행의 내부 심사 모델에 따라, <span class="hl">채무불이행 가능성이 낮다고 판단되는 고객에게 더 높은 신용 한도</span>를 설정합니다.</li>
+          <li>따라서 데이터에서 신용 한도 &uarr; &rarr; 채무불이행률 &darr; 로 보이지만, 이는 인과가 아니라 <span class="hl">교란편향(confounding bias)</span>입니다.</li>
+          <li>교란 요인(위험도, 신용점수 등)을 통제하면 관계가 양수로 전환됩니다.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q3 정답</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- Q4 질문 -->
+    <section class="slide" data-index="33">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="quiz-badge">복습 퀴즈 Q4</div>
+      <div class="section-title">FWL 정리의 세 단계</div>
+      <div class="body">
+        <p style="margin-bottom:16px;">프리슈&ndash;워&ndash;로벨(FWL) 정리에 따른 세 단계를 <b>올바른 순서</b>로 나열한 것은?</p>
+        <ul>
+          <li><b>A.</b> 잡음 제거 &rarr; 편향 제거 &rarr; 결과 모델</li>
+          <li><b>B.</b> 편향 제거 &rarr; 잡음 제거 &rarr; 결과 모델</li>
+          <li><b>C.</b> 결과 모델 &rarr; 편향 제거 &rarr; 잡음 제거</li>
+          <li><b>D.</b> 편향 제거 &rarr; 결과 모델 &rarr; 잡음 제거</li>
+        </ul>
+        <div class="note">&rarr; 키를 눌러 정답을 확인하세요.</div>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q4</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- Q4 정답 -->
+    <section class="slide" data-index="34">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="answer-badge">Q4 정답</div>
+      <div class="section-title">정답: B</div>
+      <div class="body">
+        <ul>
+          <li><b>1단계 &mdash; 편향 제거:</b> T를 교란 요인 X에 대해 회귀 &rarr; 처치 잔차 T&#x0303; = T &minus; T&#x0302;</li>
+          <li><b>2단계 &mdash; 잡음 제거:</b> Y를 교란 요인 X에 대해 회귀 &rarr; 결과 잔차 Y&#x0303; = Y &minus; Y&#x0302;</li>
+          <li><b>3단계 &mdash; 결과 모델:</b> Y&#x0303;를 T&#x0303;에 대해 회귀 &rarr; 인과효과 추정</li>
+          <li>참고: 편향 제거 단계가 가장 중요하며, 이 단계만으로도 올바른 추정값을 얻을 수 있습니다.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q4 정답</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- Q5 질문 -->
+    <section class="slide" data-index="35">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="quiz-badge">복습 퀴즈 Q5</div>
+      <div class="section-title">다중회귀 계수의 해석</div>
+      <div class="body">
+        <p style="margin-bottom:16px;">다중선형회귀에서 처치 변수 T의 회귀계수 &tau;에 대한 올바른 해석은?</p>
+        <ul>
+          <li><b>A.</b> T만으로 Y를 회귀했을 때의 기울기</li>
+          <li><b>B.</b> 모든 교란 요인의 효과를 합산한 값</li>
+          <li><b>C.</b> 다른 모든 변수의 효과를 고려한 후 얻은 T의 이변량(bivariate) 계수</li>
+          <li><b>D.</b> T가 모델에서 설명하는 분산의 비율</li>
+        </ul>
+        <div class="note">&rarr; 키를 눌러 정답을 확인하세요.</div>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q5</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- Q5 정답 -->
+    <section class="slide" data-index="36">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="answer-badge">Q5 정답</div>
+      <div class="section-title">정답: C</div>
+      <div class="body">
+        <ul>
+          <li>다중회귀에서 &tau;는 T&#x0303;(T를 다른 변수 X로 잔차화한 것)와 Y의 공분산을 T&#x0303;의 분산으로 나눈 값.</li>
+          <li>즉, <span class="hl">"다른 모든 변수의 효과를 고려(통제)한 후 얻은 T의 이변량 계수"</span>.</li>
+          <li>인과추론 관점: 다른 변수를 사용해 T를 예측한 후 남은 변동이 Y에 미치는 효과를 측정한 것입니다.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q5 정답</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- Q6 질문 -->
+    <section class="slide" data-index="37">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="quiz-badge">복습 퀴즈 Q6</div>
+      <div class="section-title">양수성 가정</div>
+      <div class="body">
+        <p style="margin-bottom:16px;"><b>양수성(positivity) 가정</b>이 충족되지 않을 때, 회귀분석에서 발생하는 문제는?</p>
+        <ul>
+          <li><b>A.</b> 회귀 모델이 수렴하지 않는다</li>
+          <li><b>B.</b> 처치 효과가 항상 0으로 추정된다</li>
+          <li><b>C.</b> 회귀분석이 데이터가 없는 영역을 외삽(extrapolation)으로 대체하므로, 추정이 부정확할 수 있다</li>
+          <li><b>D.</b> 교란 변수를 더 이상 통제할 수 없다</li>
+        </ul>
+        <div class="note">&rarr; 키를 눌러 정답을 확인하세요.</div>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q6</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- Q6 정답 -->
+    <section class="slide" data-index="38">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="answer-badge">Q6 정답</div>
+      <div class="section-title">정답: C</div>
+      <div class="body">
+        <ul>
+          <li>양수성 가정: 모든 X 값에서 0 &lt; P(T=1|X) &lt; 1 이어야 한다.</li>
+          <li>이 가정이 깨지면, 특정 처치를 전혀 받지 않는 X 영역이 존재.</li>
+          <li>회귀분석은 모수적 모델이므로 <span class="hl">데이터가 없는 영역도 외삽</span>으로 채우는데, 이 외삽이 정확하지 않을 수 있다.</li>
+          <li>지나친 외삽은 <span class="hl">처치효과를 과소평가하거나 과대평가</span>하는 위험이 있다.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q6 정답</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- Q7 질문 -->
+    <section class="slide" data-index="39">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="quiz-badge">복습 퀴즈 Q7</div>
+      <div class="section-title">표준오차 줄이기</div>
+      <div class="body">
+        <p style="margin-bottom:16px;">연속형 처치의 표준오차 공식이 다음과 같을 때:</p>
+        <div class="formula">SE &asymp; &sigma;(y) / [ &sigma;(T) &middot; &radic;(n &minus; 2) ]</div>
+        <p style="margin-bottom:16px;">표준오차를 줄이기 위한 방법으로 <b>올바르지 않은</b> 것은?</p>
+        <ul>
+          <li><b>A.</b> 표본 크기 n을 늘린다</li>
+          <li><b>B.</b> 처치의 분산 &sigma;(T)를 키운다</li>
+          <li><b>C.</b> 잡음 제거를 통해 &sigma;(y)를 줄인다</li>
+          <li><b>D.</b> 교란 변수를 모델에서 제거한다</li>
+        </ul>
+        <div class="note">&rarr; 키를 눌러 정답을 확인하세요.</div>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q7</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- Q7 정답 -->
+    <section class="slide" data-index="40">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="answer-badge">Q7 정답</div>
+      <div class="section-title">정답: D</div>
+      <div class="body">
+        <ul>
+          <li><b>A (O):</b> n이 커지면 &radic;(n-2)가 커져서 SE 감소.</li>
+          <li><b>B (O):</b> &sigma;(T)가 커지면 분모가 커져서 SE 감소. 실험 설계 시 처치의 분포를 넓게 가져가면 유리.</li>
+          <li><b>C (O):</b> 잡음 제거(FWL 2단계)를 통해 &sigma;(y)를 줄이면 SE 감소.</li>
+          <li><b>D (X):</b> 교란 변수를 제거하면 오히려 <span class="hl">편향이 발생</span>하고, 잡음도 제거되지 않아 SE가 커질 수 있다.</li>
+        </ul>
+      </div>
+      <div class="footer">4장 복습 퀴즈 &middot; Q7 정답</div>
+      <div class="nav-hint"><span>&larr;</span><span>&rarr;</span></div>
+    </section>
+
+    <!-- ====== 마지막 슬라이드 ====== -->
+    <section class="slide" data-index="41">
+      <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
+      <div class="title-main" style="margin-top:60px;">수고하셨습니다!</div>
+      <div class="subtitle">Chapter 4 &mdash; 유용한 선형회귀 끝</div>
+      <div class="body">
+        <ul>
+          <li>선형회귀는 단순한 예측 모델이 아니라, <span class="hl">편향을 제거하고 인과효과를 추정</span>하는 강력한 도구.</li>
+          <li>FWL 정리를 통해 <span class="hl">편향 제거와 추정을 분리</span>할 수 있다는 것이 핵심.</li>
+          <li>양수성 가정과 비선형성에 대한 주의가 필요.</li>
+          <li>다음 장에서는 이 아이디어를 더 확장합니다!</li>
+        </ul>
+      </div>
+      <div class="footer">4장 유용한 선형회귀 &middot; END</div>
+      <div class="nav-hint"><span>&larr;</span> 처음으로 돌아가려면 &larr; 반복</div>
+    </section>
+
   </div>
 
   <script>
     (function () {
-      const slides = Array.from(document.querySelectorAll('.slide'));
-      let index = 0;
+      var slides = Array.from(document.querySelectorAll('.slide'));
+      var total = slides.length;
+      var idx = 0;
+      var counter = document.getElementById('counter');
 
-      function showSlide(i) {
-        if (i < 0 || i >= slides.length) return;
-        slides[index].classList.remove('active');
-        index = i;
-        slides[index].classList.add('active');
+      function show(i) {
+        if (i < 0 || i >= total) return;
+        slides[idx].classList.remove('active');
+        idx = i;
+        slides[idx].classList.add('active');
+        counter.textContent = (idx + 1) + ' / ' + total;
       }
 
-      function onKey(e) {
+      show(0);
+
+      window.addEventListener('keydown', function (e) {
         if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
-          showSlide(index + 1);
+          e.preventDefault(); show(idx + 1);
         } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-          showSlide(index - 1);
+          e.preventDefault(); show(idx - 1);
+        } else if (e.key === 'Home') {
+          show(0);
+        } else if (e.key === 'End') {
+          show(total - 1);
         }
-      }
-
-      window.addEventListener('keydown', onKey);
+      });
     })();
   </script>
 </body>
 </html>
-
