@@ -540,44 +540,76 @@
       <div class="nav-hint"><span class="nav-btn" data-dir="prev">&larr;</span><span class="nav-btn" data-dir="next">&rarr;</span></div>
     </section>
 
-    <!-- ====== Slide 21: FWL 요약 시각화 ====== -->
+    <!-- ====== Slide 21: FWL 요약 시각화 (그림 4-1) ====== -->
     <section class="slide" data-index="21">
       <div class="chapter-label"><span>CHAPTER</span><span class="number">4</span></div>
-      <div class="section-title"><span class="num">4.3.5</span>FWL 정리 요약 &mdash; 시각적 이해</div>
+      <div class="section-title"><span class="num">4.3.5</span>그림 4-1: 직교화로 편향 제거하기</div>
       <div class="body">
-        <ul>
-          <li><b>그림 4-1: 직교화로 편향 제거하기</b></li>
-          <li>1단계: 처치 T와 결과 Y를 색(교란 요인 X)으로 표시 &rarr; 처음에는 음의 기울기.</li>
-          <li>2단계: $E[T|X]$를 추정하고 편향 제거 &rarr; $T - E[T|X]$.</li>
-          <li>3단계: 편향 제거된 처치를 사용하면 찾으려는 <span class="hl">양의 관계</span>가 드러남. 하지만 여전히 잡음이 많음.</li>
-        </ul>
-        <div style="display:flex;gap:20px;margin-top:14px;justify-content:center;">
-          <svg viewBox="0 0 180 130" style="width:170px;">
-            <text x="90" y="12" text-anchor="middle" fill="#ff6b6b" font-size="10" font-weight="700">Before: 편향 있음</text>
-            <line x1="20" y1="120" x2="170" y2="120" stroke="#555" stroke-width="1"/>
-            <line x1="20" y1="120" x2="20" y2="20" stroke="#555" stroke-width="1"/>
-            <text x="95" y="132" text-anchor="middle" fill="#777" font-size="8">T</text>
-            <text x="10" y="70" text-anchor="middle" fill="#777" font-size="8" transform="rotate(-90,10,70)">Y</text>
-            <circle cx="40" cy="35" r="3" fill="#6bb3ff" opacity="0.5"/><circle cx="50" cy="45" r="3" fill="#6bb3ff" opacity="0.5"/>
-            <circle cx="65" cy="50" r="3" fill="#6bb3ff" opacity="0.5"/><circle cx="80" cy="60" r="3" fill="#6bb3ff" opacity="0.5"/>
-            <circle cx="100" cy="70" r="3" fill="#ff6b6b" opacity="0.5"/><circle cx="115" cy="80" r="3" fill="#ff6b6b" opacity="0.5"/>
-            <circle cx="130" cy="85" r="3" fill="#ff6b6b" opacity="0.5"/><circle cx="150" cy="100" r="3" fill="#ff6b6b" opacity="0.5"/>
-            <line x1="35" y1="30" x2="155" y2="105" stroke="#ff6b6b" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <div style="display:flex;gap:12px;margin-top:6px;justify-content:center;flex-wrap:wrap;">
+          <!-- Panel 1: 원본 데이터 (교란 있음) -->
+          <svg viewBox="0 0 200 160" style="width:30%;min-width:180px;">
+            <text x="100" y="14" text-anchor="middle" fill="#ff6b6b" font-size="10" font-weight="700">① 원본: 교란에 의한 음의 기울기</text>
+            <line x1="25" y1="140" x2="190" y2="140" stroke="#555" stroke-width="1"/>
+            <line x1="25" y1="140" x2="25" y2="22" stroke="#555" stroke-width="1"/>
+            <text x="108" y="155" text-anchor="middle" fill="#888" font-size="9">T (신용 한도)</text>
+            <text x="10" y="80" text-anchor="middle" fill="#888" font-size="9" transform="rotate(-90,10,80)">Y (채무불이행)</text>
+            <!-- 파란 점 (저위험 고객: 높은 T, 낮은 Y) -->
+            <circle cx="120" cy="95" r="3.5" fill="#6bb3ff" opacity="0.7"/><circle cx="135" cy="100" r="3.5" fill="#6bb3ff" opacity="0.7"/>
+            <circle cx="145" cy="108" r="3.5" fill="#6bb3ff" opacity="0.7"/><circle cx="158" cy="112" r="3.5" fill="#6bb3ff" opacity="0.7"/>
+            <circle cx="168" cy="118" r="3.5" fill="#6bb3ff" opacity="0.7"/><circle cx="178" cy="125" r="3.5" fill="#6bb3ff" opacity="0.7"/>
+            <!-- 빨간 점 (고위험 고객: 낮은 T, 높은 Y) -->
+            <circle cx="38" cy="38" r="3.5" fill="#ff6b6b" opacity="0.7"/><circle cx="48" cy="45" r="3.5" fill="#ff6b6b" opacity="0.7"/>
+            <circle cx="58" cy="52" r="3.5" fill="#ff6b6b" opacity="0.7"/><circle cx="70" cy="58" r="3.5" fill="#ff6b6b" opacity="0.7"/>
+            <circle cx="82" cy="68" r="3.5" fill="#ff6b6b" opacity="0.7"/><circle cx="95" cy="78" r="3.5" fill="#ff6b6b" opacity="0.7"/>
+            <!-- 음의 회귀선 -->
+            <line x1="35" y1="35" x2="180" y2="128" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5,3"/>
+            <text x="160" y="38" fill="#ff6b6b" font-size="8">음의 기울기</text>
+            <text x="160" y="48" fill="#ff6b6b" font-size="7">(교란 편향!)</text>
+            <!-- 범례 -->
+            <circle cx="40" cy="150" r="3" fill="#ff6b6b"/><text x="48" y="153" fill="#999" font-size="7">고위험(X↑)</text>
+            <circle cx="110" cy="150" r="3" fill="#6bb3ff"/><text x="118" y="153" fill="#999" font-size="7">저위험(X↓)</text>
           </svg>
-          <svg viewBox="0 0 180 130" style="width:170px;">
-            <text x="90" y="12" text-anchor="middle" fill="#4caf50" font-size="10" font-weight="700">After: 편향 제거</text>
-            <line x1="20" y1="120" x2="170" y2="120" stroke="#555" stroke-width="1"/>
-            <line x1="20" y1="120" x2="20" y2="20" stroke="#555" stroke-width="1"/>
-            <text x="95" y="132" text-anchor="middle" fill="#777" font-size="8">T &minus; E[T|X]</text>
-            <text x="10" y="70" text-anchor="middle" fill="#777" font-size="8" transform="rotate(-90,10,70)">Y</text>
-            <circle cx="50" cy="80" r="3" fill="#ccc" opacity="0.5"/><circle cx="65" cy="70" r="3" fill="#ccc" opacity="0.5"/>
-            <circle cx="75" cy="65" r="3" fill="#ccc" opacity="0.5"/><circle cx="90" cy="55" r="3" fill="#ccc" opacity="0.5"/>
-            <circle cx="100" cy="60" r="3" fill="#ccc" opacity="0.5"/><circle cx="115" cy="50" r="3" fill="#ccc" opacity="0.5"/>
-            <circle cx="130" cy="45" r="3" fill="#ccc" opacity="0.5"/><circle cx="145" cy="35" r="3" fill="#ccc" opacity="0.5"/>
-            <line x1="40" y1="85" x2="155" y2="30" stroke="#4caf50" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <!-- Panel 2: 편향 제거 (T만 잔차화) -->
+          <svg viewBox="0 0 200 160" style="width:30%;min-width:180px;">
+            <text x="100" y="14" text-anchor="middle" fill="#ffe66b" font-size="10" font-weight="700">② 편향 제거: T 잔차화</text>
+            <line x1="25" y1="140" x2="190" y2="140" stroke="#555" stroke-width="1"/>
+            <line x1="25" y1="140" x2="25" y2="22" stroke="#555" stroke-width="1"/>
+            <text x="108" y="155" text-anchor="middle" fill="#888" font-size="9">T - E[T|X]</text>
+            <text x="10" y="80" text-anchor="middle" fill="#888" font-size="9" transform="rotate(-90,10,80)">Y</text>
+            <!-- 점들이 중앙으로 모임, 약한 양의 추세 + 넓은 분산 -->
+            <circle cx="55" cy="110" r="3.5" fill="#ccc" opacity="0.6"/><circle cx="68" cy="95" r="3.5" fill="#ccc" opacity="0.6"/>
+            <circle cx="78" cy="105" r="3.5" fill="#ccc" opacity="0.6"/><circle cx="88" cy="82" r="3.5" fill="#ccc" opacity="0.6"/>
+            <circle cx="95" cy="70" r="3.5" fill="#ccc" opacity="0.6"/><circle cx="105" cy="90" r="3.5" fill="#ccc" opacity="0.6"/>
+            <circle cx="112" cy="55" r="3.5" fill="#ccc" opacity="0.6"/><circle cx="125" cy="65" r="3.5" fill="#ccc" opacity="0.6"/>
+            <circle cx="135" cy="48" r="3.5" fill="#ccc" opacity="0.6"/><circle cx="148" cy="58" r="3.5" fill="#ccc" opacity="0.6"/>
+            <circle cx="158" cy="40" r="3.5" fill="#ccc" opacity="0.6"/><circle cx="170" cy="35" r="3.5" fill="#ccc" opacity="0.6"/>
+            <!-- 양의 회귀선 (약간 noisy) -->
+            <line x1="45" y1="115" x2="175" y2="32" stroke="#ffe66b" stroke-width="2" stroke-dasharray="5,3"/>
+            <text x="140" y="130" fill="#ffe66b" font-size="8">양의 기울기!</text>
+            <text x="140" y="140" fill="#999" font-size="7">(잡음은 여전)</text>
+          </svg>
+          <!-- Panel 3: 편향+잡음 제거 -->
+          <svg viewBox="0 0 200 160" style="width:30%;min-width:180px;">
+            <text x="100" y="14" text-anchor="middle" fill="#4caf50" font-size="10" font-weight="700">③ 잡음까지 제거: 깔끔!</text>
+            <line x1="25" y1="140" x2="190" y2="140" stroke="#555" stroke-width="1"/>
+            <line x1="25" y1="140" x2="25" y2="22" stroke="#555" stroke-width="1"/>
+            <text x="108" y="155" text-anchor="middle" fill="#888" font-size="9">T - E[T|X]</text>
+            <text x="10" y="80" text-anchor="middle" fill="#888" font-size="9" transform="rotate(-90,10,80)">Y - E[Y|X]</text>
+            <!-- 점들이 직선에 가까이 모임 -->
+            <circle cx="45" cy="122" r="3.5" fill="#4caf50" opacity="0.7"/><circle cx="58" cy="112" r="3.5" fill="#4caf50" opacity="0.7"/>
+            <circle cx="72" cy="102" r="3.5" fill="#4caf50" opacity="0.7"/><circle cx="85" cy="93" r="3.5" fill="#4caf50" opacity="0.7"/>
+            <circle cx="98" cy="82" r="3.5" fill="#4caf50" opacity="0.7"/><circle cx="110" cy="73" r="3.5" fill="#4caf50" opacity="0.7"/>
+            <circle cx="125" cy="62" r="3.5" fill="#4caf50" opacity="0.7"/><circle cx="138" cy="52" r="3.5" fill="#4caf50" opacity="0.7"/>
+            <circle cx="152" cy="43" r="3.5" fill="#4caf50" opacity="0.7"/><circle cx="165" cy="35" r="3.5" fill="#4caf50" opacity="0.7"/>
+            <!-- 깔끔한 양의 회귀선 -->
+            <line x1="40" y1="126" x2="172" y2="32" stroke="#4caf50" stroke-width="2.5"/>
+            <text x="130" y="130" fill="#4caf50" font-size="8">깔끔한 양의</text>
+            <text x="130" y="140" fill="#4caf50" font-size="8">인과효과!</text>
           </svg>
         </div>
-        <div class="note">핵심: 편향 제거 = X와의 상관관계가 없는 버전의 처치를 만드는 과정.</div>
+        <div class="note" style="margin-top:12px;">
+          <b>핵심:</b> ① 교란으로 인해 T↑→Y↓ 처럼 보이지만 → ② T를 잔차화하면 양의 관계가 드러남 → ③ Y까지 잔차화하면 잡음이 줄어 관계가 더 선명해짐.
+        </div>
       </div>
       <div class="footer">4장 유용한 선형회귀 &middot; 22</div>
       <div class="nav-hint"><span class="nav-btn" data-dir="prev">&larr;</span><span class="nav-btn" data-dir="next">&rarr;</span></div>
@@ -607,13 +639,21 @@
       <div class="body">
         <ul>
           <li>회귀분석은 처치를 직교화하는 방식뿐 아니라, <span class="hl">잠재적 결과를 대체(imputation)</span>하는 방법으로도 볼 수 있다.</li>
-          <li>대조군(T=0)에서 X에 대한 Y의 회귀분석이 $E[Y_0|X]$를 잘 근사한다면:</li>
         </ul>
+
+        <p style="font-weight:700;margin:14px 0 6px;color:#ffe66b;">1. ATT (처치군에 대한 평균 처치 효과)</p>
         <div class="formula">$$\text{ATT} = \frac{1}{N_1} \sum \mathbb{1}(T_i\!=\!1) \cdot \bigl(Y_i - \hat{\mu}_0(X_i)\bigr)$$</div>
-        <ul>
-          <li>두 접근법을 병행하면 ATE도 추정 가능:</li>
-        </ul>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 14px;margin:6px 0 14px;font-size:15px;color:#ccc;line-height:1.7;">
+          처치 효과(<b>ATT</b>)는, 처치 받은 사람들에 한해서($\mathbb{1}$) 실제 결과($Y_i$)와 처치를 안 받았을 때의 예측값($\hat{\mu}_0$)의 차이를 모두 더한 뒤($\sum$), 처치 인원수($N_1$)로 나눈 평균값이다.
+        </div>
+
+        <p style="font-weight:700;margin:14px 0 6px;color:#ffe66b;">2. ATE (전체 집단에 대한 평균 처치 효과)</p>
         <div class="formula">$$\text{ATE} = \frac{1}{N} \sum \bigl(\hat{\mu}_1(X_i) - \hat{\mu}_0(X_i)\bigr)$$</div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 14px;margin:6px 0 10px;font-size:15px;color:#ccc;line-height:1.7;">
+          <b>의미:</b> 전체 모집단 모두에게 처치를 했을 때와 안 했을 때의 차이입니다.<br>
+          <b>수식 풀이:</b> 모든 사람($N$)에 대해, 처치 받았을 때의 예측값($\hat{\mu}_1$)과 받지 않았을 때의 예측값($\hat{\mu}_0$)의 차이를 구해 평균을 냅니다.
+        </div>
+
         <ul>
           <li>회귀분석의 <span class="hl">이중 강건성(doubly robust)</span>: $E[T|X]$ 또는 $E[Y_t|X]$ 중 하나만 정확해도 올바른 추정 가능.</li>
         </ul>
