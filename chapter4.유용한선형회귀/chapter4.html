@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>CHAPTER 4 - 유용한 선형회귀</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", system-ui, sans-serif;
+      background: #f5f5f5;
+    }
+    .page {
+      width: 1000px;
+      height: 650px;
+      margin: 32px auto;
+      background: #ffffff;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      padding: 64px 80px;
+      position: relative;
+      color: #222;
+    }
+
+    .chapter-row {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 90px;
+    }
+    .chapter-row::before {
+      content: "";
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #666;
+      margin-right: 10px;
+    }
+    .chapter-number {
+      margin-left: 6px;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .title-main {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-bottom: 40px;
+    }
+
+    .lead-text {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #333;
+      margin-bottom: 32px;
+    }
+    .highlight {
+      background: #fff6a5;
+      padding: 0 2px;
+      border-radius: 2px;
+    }
+    .lead-english {
+      font-size: 12px;
+      color: #777;
+      font-style: italic;
+      margin-left: 4px;
+    }
+
+    .section-title {
+      margin-top: 16px;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .section-title span.number {
+      font-weight: 800;
+      margin-right: 6px;
+    }
+
+    .body-text {
+      font-size: 13px;
+      line-height: 1.9;
+      color: #444;
+    }
+
+    .page-footer {
+      position: absolute;
+      bottom: 32px;
+      right: 80px;
+      font-size: 11px;
+      color: #666;
+    }
+    .page-footer span {
+      font-weight: 600;
+      margin-right: 6px;
+    }
+
+    @media (max-width: 1100px) {
+      .page {
+        transform: scale(0.9);
+        transform-origin: top center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="chapter-row">
+      <span>CHAPTER</span>
+      <span class="chapter-number">4</span>
+    </div>
+
+    <div class="title-main">유용한 선형회귀</div>
+
+    <p class="lead-text">
+      이번 장에서는
+      <span class="highlight">중요한 편향 제거 기법인 선형회귀</span>
+      <span class="lead-english">linear regression</span>와
+      <span class="highlight">최소제곱법</span>
+      <span class="lead-english">ordinary least squares (OLS)</span>,
+      <span class="highlight">직교화</span>
+      <span class="lead-english">orthogonalization</span>을 다룹니다.
+      처치와 결과 사이의 관계를 추정할 때 선형회귀분석을 사용하면
+      교란 요인의 영향을 보정하는 데 도움이 되는지 알아봅니다. 한발 더 나아가
+      처치 직접효과라는 강력한 개념도 배웁니다. 이 개념은 선형회귀에서 비롯되었으며,
+      나중에 인과추론에 머신러닝 모델을 사용할 때 유용하게 쓰입니다.
+    </p>
+
+    <h2 class="section-title">
+      <span class="number">4.1</span>선형회귀의 필요성
+    </h2>
+
+    <p class="body-text">
+      회귀분석은 데이터 과학을 처음 접하는 사람들이 배우는 기본적인 모델 중 하나이며,
+      비교적 단순하다고 여겨집니다. 그런데, 실제로는 여러분이 선형회귀분석을 제대로
+      이해하고 있지 않을 수 있습니다. 회귀분석은 100년이 넘는 역사를 가진 모형임에도
+      불구하고, 인과추론에서 여전히 매력적이고, 강력하며, 때로는 위험한 도구로 평가받습니다.
+      회귀분석은 오늘날까지도 가장 뛰어난 인과추론 연구자조차 놀라게 만듭니다.
+      그러니 이 장을 넘기기 전에, 회귀분석의 깊은 매력을 한 번 더 살펴볼까요?
+    </p>
+
+    <div class="page-footer">
+      <span>4장 유용한 선형회귀</span>141
+    </div>
+  </div>
+</body>
+</html>
+
