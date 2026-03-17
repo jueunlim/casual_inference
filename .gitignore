@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# VSCode / Editor
+.vscode/
+
+# 이미지 참고용 리소스 (원본 PDF/이미지 등)
+chapter4.유용한선형회귀/ref/
+
